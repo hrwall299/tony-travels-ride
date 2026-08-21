@@ -37,11 +37,13 @@ function formatDate(value?: string) {
 
 function formatTime(value?: string) {
   if (!value) return "";
-  const [h, m] = value.split(":").map(Number);
+  const [hRaw, mRaw] = value.split(":").map(Number);
+  const h = hRaw ?? NaN;
+  const m = mRaw ?? 0;
   if (Number.isNaN(h)) return value;
   const suffix = h >= 12 ? "PM" : "AM";
   const hour12 = h % 12 === 0 ? 12 : h % 12;
-  return `${hour12}:${String(m ?? 0).padStart(2, "0")} ${suffix}`;
+  return `${hour12}:${String(m).padStart(2, "0")} ${suffix}`;
 }
 
 export function buildBookingMessage(b: BookingDetails) {

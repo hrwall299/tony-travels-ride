@@ -50,7 +50,7 @@ export function VehicleGallery() {
             alt={current.alt}
             width={1600}
             height={1000}
-            className="w-full animate-in fade-in duration-500"
+            className="w-full"
           />
           <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-background/90 px-4 py-2 text-xs">
             <span className="font-medium text-primary-dark">{current.alt}</span>

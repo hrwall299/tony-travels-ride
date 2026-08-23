@@ -51,7 +51,7 @@ export function VehicleVideo() {
                 aria-label={playing ? "Pause video" : "Play video"}
                 className="absolute bottom-4 left-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-lg transition-transform hover:scale-105"
               >
-                {playing ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
+                {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               </button>
             </>
           ) : (

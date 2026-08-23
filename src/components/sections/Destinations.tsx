@@ -1,34 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import hyderabad from "@/assets/dest-hyderabad.jpg";
-import khammam from "@/assets/dest-khammam.jpg";
-import vijayawada from "@/assets/dest-vijayawada.jpg";
-import warangal from "@/assets/dest-warangal.jpg";
+import { MapPin } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
-
-export const destinations = [
-  {
-    name: "Hyderabad",
-    image: hyderabad,
-    text: "City drops, business travel and airport transfers from Khammam.",
-  },
-  {
-    name: "Warangal",
-    image: warangal,
-    text: "Temple visits, family trips and day journeys.",
-  },
-  {
-    name: "Vijayawada",
-    image: vijayawada,
-    text: "Comfortable travel into Andhra Pradesh.",
-  },
-  {
-    name: "Khammam & nearby",
-    image: khammam,
-    text: "Local pickups, hourly travel and short-distance trips.",
-  },
-];
+import { useContent } from "@/lib/content";
+import { mediaUrl } from "@/lib/media";
 
 export function Destinations() {
+  const { items } = useContent("routes");
+
   return (
     <section className="bg-surface py-16 lg:py-20">
       <div className="section-x">
@@ -52,18 +30,30 @@ export function Destinations() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {destinations.map((d, i) => (
-            <Reveal key={d.name} delay={i * 60}>
-              <article className="h-full border border-border bg-background">
-                <img
-                  src={d.image}
-                  alt={`Travel to ${d.name}`}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-                <div className="p-5">
+          {items.map((d, i) => (
+            <Reveal key={d.id} delay={i * 60}>
+              <article className="flex h-full flex-col border border-border bg-background">
+                {d.image ? (
+                  <img
+                    src={mediaUrl(d.image)}
+                    alt={`Travel to ${d.name}`}
+                    loading="lazy"
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex aspect-[4/3] w-full flex-col justify-end border-b border-border bg-primary p-5 text-primary-foreground">
+                    <MapPin className="h-6 w-6 opacity-80" strokeWidth={1.6} />
+                    <p className="mt-3 font-display text-2xl font-bold uppercase leading-tight">
+                      {d.name.replace(/^Khammam\s*→\s*/, "")}
+                    </p>
+                    <p className="text-xs uppercase tracking-[0.2em] opacity-80">From Khammam</p>
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-5">
                   <h3 className="text-lg font-semibold text-foreground">{d.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{d.text}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {d.description}
+                  </p>
                   <Link
                     to="/book"
                     className="mt-4 inline-flex text-sm font-semibold text-primary hover:text-accent"

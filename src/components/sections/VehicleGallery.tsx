@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useContent } from "@/lib/content";
 import { mediaUrl } from "@/lib/media";
 
@@ -9,6 +10,12 @@ export function VehicleGallery() {
   const images = vehicle.gallery ?? [];
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const touchX = useRef<number | null>(null);
+
+  const go = (delta: number) => {
+    if (images.length === 0) return;
+    setIndex((i) => (((i + delta) % images.length) + images.length) % images.length);
+  };
 
   useEffect(() => {
     if (paused || images.length < 2) return;
@@ -43,7 +50,22 @@ export function VehicleGallery() {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        <div className="relative overflow-hidden border border-border bg-surface">
+        <div
+          className="relative overflow-hidden border border-border bg-surface"
+          onTouchStart={(e) => {
+            touchX.current = e.touches[0]?.clientX ?? null;
+            setPaused(true);
+          }}
+          onTouchEnd={(e) => {
+            const start = touchX.current;
+            const end = e.changedTouches[0]?.clientX ?? null;
+            if (start != null && end != null && Math.abs(end - start) > 40) {
+              go(end < start ? 1 : -1);
+            }
+            touchX.current = null;
+            setPaused(false);
+          }}
+        >
           <img
             key={current.src}
             src={mediaUrl(current.src)}
@@ -52,6 +74,24 @@ export function VehicleGallery() {
             height={1000}
             className="w-full"
           />
+
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous photo"
+            className="absolute left-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center bg-background/90 text-primary-dark transition-colors hover:bg-background"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next photo"
+            className="absolute right-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center bg-background/90 text-primary-dark transition-colors hover:bg-background"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
           <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-background/90 px-4 py-2 text-xs">
             <span className="font-medium text-primary-dark">{current.alt}</span>
             <span className="text-muted-foreground">

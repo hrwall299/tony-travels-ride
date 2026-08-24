@@ -1,12 +1,14 @@
 import { business } from "@/config/business";
 
-export function whatsappUrl(message: string) {
-  return `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(message)}`;
+export function whatsappUrl(message: string, number?: string) {
+  const to = (number || business.whatsapp).replace(/\D/g, "");
+  return `https://wa.me/${to}?text=${encodeURIComponent(message)}`;
 }
 
-export const generalEnquiryUrl = () =>
+export const generalEnquiryUrl = (number?: string) =>
   whatsappUrl(
     `Hello ${business.name},\n\nI would like to enquire about your car travel services.`,
+    number,
   );
 
 export type BookingDetails = {
@@ -28,14 +30,14 @@ export type BookingDetails = {
   notes?: string;
 };
 
-function formatDate(value?: string) {
+export function formatDate(value?: string) {
   if (!value) return "";
   const d = new Date(`${value}T00:00:00`);
   if (Number.isNaN(d.getTime())) return value;
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
 }
 
-function formatTime(value?: string) {
+export function formatTime(value?: string) {
   if (!value) return "";
   const [hRaw, mRaw] = value.split(":").map(Number);
   const h = hRaw ?? NaN;
@@ -47,8 +49,11 @@ function formatTime(value?: string) {
 }
 
 export function buildBookingMessage(b: BookingDetails) {
+  const isRoundTrip = /round trip/i.test(b.tripType);
+  const isAirport = /airport/i.test(b.tripType);
+
   const lines: string[] = [];
-  lines.push(`Hello ${business.name},`, "", "I would like to book a ride.", "");
+  lines.push(`Hello ${business.name},`, "", "I would like to request a booking.", "");
 
   lines.push("Customer Details:");
   lines.push(`Name: ${b.name}`);
@@ -63,11 +68,11 @@ export function buildBookingMessage(b: BookingDetails) {
   lines.push(`Drop: ${b.drop}`);
   lines.push(`Travel Date: ${formatDate(b.travelDate)}`);
   lines.push(`Pickup Time: ${formatTime(b.pickupTime)}`);
-  if (b.returnDate) lines.push(`Return Date: ${formatDate(b.returnDate)}`);
-  if (b.returnTime) lines.push(`Return Time: ${formatTime(b.returnTime)}`);
+  if (isRoundTrip && b.returnDate) lines.push(`Return Date: ${formatDate(b.returnDate)}`);
+  if (isRoundTrip && b.returnTime) lines.push(`Return Time: ${formatTime(b.returnTime)}`);
   lines.push(`Passengers: ${b.passengers}`);
-  if (b.airportDirection) lines.push(`Airport Service: ${b.airportDirection}`);
-  if (b.flightNumber) lines.push(`Flight Number: ${b.flightNumber}`);
+  if (isAirport && b.airportDirection) lines.push(`Airport Service: ${b.airportDirection}`);
+  if (isAirport && b.flightNumber) lines.push(`Flight Number: ${b.flightNumber}`);
   lines.push("");
 
   lines.push(`Vehicle: ${b.vehicle}`);

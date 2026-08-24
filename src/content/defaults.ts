@@ -35,6 +35,20 @@ export type VehicleContent = {
   gallery: GalleryImage[];
   threeSixty: GalleryImage[];
   video: { src: string; poster: string; title: string; description: string };
+  details: VehicleDetailGroup[];
+};
+
+export type VehicleDetailGroup = {
+  id: string;
+  label: string;
+  intro: string;
+  images: GalleryImage[];
+};
+
+export type AboutContent = {
+  eyebrow: string;
+  heading: string;
+  points: { title: string; text: string; icon: string }[];
 };
 
 export type ServiceItem = {
@@ -120,6 +134,63 @@ export const defaultVehicle: VehicleContent = {
     description:
       "A short walkaround of the Hyundai Venue Facelift used for all Tony Tour & Travels trips.",
   },
+  details: [
+    {
+      id: "exterior",
+      label: "Exterior",
+      intro: "Well-maintained bodywork, clean paint and regularly serviced tyres.",
+      images: [
+        { src: car315, alt: "Front" },
+        { src: car090, alt: "Side profile" },
+        { src: car135, alt: "Rear" },
+      ],
+    },
+    {
+      id: "interior",
+      label: "Interior",
+      intro: "A clean cabin, working air conditioning and comfortable seating for every trip.",
+      images: [
+        { src: dash, alt: "Dashboard & controls" },
+        { src: seats, alt: "Rear seats" },
+      ],
+    },
+    {
+      id: "boot",
+      label: "Boot / Luggage",
+      intro: "Space for suitcases and travel bags on outstation and airport trips.",
+      images: [{ src: boot, alt: "Boot with luggage" }],
+    },
+    {
+      id: "comfort",
+      label: "Passenger Comfort",
+      intro:
+        "Air-conditioned travel, clean seating and steady, safety-focused driving on long routes.",
+      images: [
+        { src: seats, alt: "Seating comfort" },
+        { src: dash, alt: "Climate control" },
+      ],
+    },
+  ],
+};
+
+export const defaultAbout: AboutContent = {
+  eyebrow: "Why Choose Us",
+  heading: "Built On Everyday Dependability",
+  points: [
+    { title: "Reliable Pickup", text: "We value your time.", icon: "Clock" },
+    { title: "Comfortable Travel", text: "Clean and comfortable rides.", icon: "Sparkles" },
+    {
+      title: "Experienced Service",
+      text: "Local travel knowledge and dependable service.",
+      icon: "ShieldCheck",
+    },
+    { title: "Easy Booking", text: "Book directly through WhatsApp.", icon: "MessageCircle" },
+    {
+      title: "Flexible Destinations",
+      text: "Travel across Telangana, Andhra Pradesh and beyond.",
+      icon: "Map",
+    },
+  ],
 };
 
 export const defaultServices: ServiceItem[] = [
@@ -213,6 +284,7 @@ export const contentDefaults = {
   vehicle: defaultVehicle,
   services: { items: defaultServices },
   routes: { items: defaultRoutes },
+  about: defaultAbout,
   contact: defaultContact,
   footer: defaultFooter,
 };

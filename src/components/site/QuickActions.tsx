@@ -1,14 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { Car, MessageCircle, Phone } from "lucide-react";
-import { business } from "@/config/business";
+import { Car, Home, Phone } from "lucide-react";
+import { useContent } from "@/lib/content";
 import { generalEnquiryUrl } from "@/lib/whatsapp";
 
 /** Floating WhatsApp button (all viewports) + sticky action bar on mobile. */
 export function QuickActions() {
+  const contact = useContent("contact");
+
   return (
     <>
       <a
-        href={generalEnquiryUrl()}
+        href={generalEnquiryUrl(contact.whatsapp)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with us on WhatsApp"
@@ -19,32 +21,26 @@ export function QuickActions() {
         </svg>
       </a>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-border bg-background md:hidden">
-        <Link to="/book" className="flex flex-col items-center gap-1 py-2 text-[11px] font-medium text-primary-dark">
+      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-border bg-background md:hidden">
+        <Link
+          to="/book"
+          className="flex flex-col items-center gap-1 py-2 text-[11px] font-medium text-primary-dark"
+        >
           <Car className="h-[18px] w-[18px] text-primary" />
           Book
         </Link>
         <a
-          href={`tel:${business.phoneHref}`}
+          href={`tel:${contact.phoneHref}`}
           className="flex flex-col items-center gap-1 border-l border-border py-2 text-[11px] font-medium text-primary-dark"
         >
           <Phone className="h-[18px] w-[18px] text-primary" />
           Call
         </a>
-        <a
-          href={generalEnquiryUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col items-center gap-1 border-l border-border py-2 text-[11px] font-medium text-primary-dark"
-        >
-          <MessageCircle className="h-[18px] w-[18px] text-primary" />
-          WhatsApp
-        </a>
         <Link
           to="/our-cars"
           className="flex flex-col items-center gap-1 border-l border-border py-2 text-[11px] font-medium text-primary-dark"
         >
-          <Car className="h-[18px] w-[18px] text-accent" />
+          <Home className="h-[18px] w-[18px] text-accent" />
           Our Car
         </Link>
       </div>

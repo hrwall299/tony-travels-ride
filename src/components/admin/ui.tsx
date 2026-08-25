@@ -16,7 +16,7 @@ export function AdminField({
 }: {
   label: string;
   children: React.ReactNode;
-  hint?: string;
+  hint?: string | undefined;
 }) {
   return (
     <label className="block">
@@ -38,7 +38,7 @@ export function TextInput({
   value: string;
   onChange: (v: string) => void;
   type?: string;
-  hint?: string;
+  hint?: string | undefined;
 }) {
   return (
     <AdminField label={label} hint={hint}>
@@ -84,7 +84,7 @@ export function SaveBar({
   onSave: () => void;
   saving: boolean;
   saved: boolean;
-  error?: string | null;
+  error?: string | null | undefined;
 }) {
   return (
     <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-border bg-background/95 py-3 backdrop-blur">
@@ -108,7 +108,7 @@ export function AdminCard({
   children,
 }: {
   title: string;
-  description?: string;
+  description?: string | undefined;
   children: React.ReactNode;
 }) {
   return (

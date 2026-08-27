@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { vehicles } from "@/config/business";
+import { supabase } from "@/integrations/supabase/client";
+import { useContent } from "@/lib/content";
 import { buildBookingMessage, whatsappUrl, type BookingDetails } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/book")({
@@ -72,6 +74,7 @@ const emptyForm: BookingDetails = {
 };
 
 function BookPage() {
+  const contact = useContent("contact");
   const [form, setForm] = useState<BookingDetails>(emptyForm);
   const [sent, setSent] = useState(false);
 
@@ -83,9 +86,33 @@ function BookPage() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const url = whatsappUrl(buildBookingMessage(form));
+    // Open WhatsApp first so the browser treats it as a direct user action.
+    const url = whatsappUrl(buildBookingMessage(form), contact.whatsapp);
     window.open(url, "_blank", "noopener,noreferrer");
     setSent(true);
+
+    const notes = [
+      form.notes,
+      form.vehicle ? `Vehicle: ${form.vehicle}` : "",
+      isRoundTrip && form.returnDate ? `Return: ${form.returnDate} ${form.returnTime}` : "",
+      isAirport && form.airportDirection ? `Airport: ${form.airportDirection}` : "",
+      isAirport && form.flightNumber ? `Flight: ${form.flightNumber}` : "",
+      form.email ? `Email: ${form.email}` : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
+
+    void supabase.from("enquiries").insert({
+      name: form.name.trim().slice(0, 100),
+      mobile: form.mobile.trim().slice(0, 20),
+      trip_type: form.tripType,
+      pickup: form.pickup.trim().slice(0, 200),
+      drop_location: form.drop.trim().slice(0, 200),
+      travel_date: form.travelDate,
+      pickup_time: form.pickupTime,
+      passengers: form.passengers,
+      message: notes.slice(0, 1000),
+    });
   };
 
   return (
@@ -294,8 +321,9 @@ function BookPage() {
             </button>
             {sent ? (
               <p className="mt-4 border-l-2 border-accent bg-background p-3 text-sm text-foreground">
-                Your booking message is prepared in WhatsApp. Send it and we&apos;ll confirm
-                availability and fare shortly.
+                Your enquiry has been recorded and a message is prepared in WhatsApp. Send it and
+                we&apos;ll confirm availability and fare — the booking is confirmed only once we
+                reply.
               </p>
             ) : (
               <p className="mt-4 text-xs text-muted-foreground">

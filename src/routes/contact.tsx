@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
-import { business } from "@/config/business";
 import { useContent } from "@/lib/content";
 import { generalEnquiryUrl } from "@/lib/whatsapp";
 

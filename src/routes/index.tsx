@@ -31,6 +31,8 @@ function Index() {
     <>
       <Hero />
       <VehicleViewer />
+      <VehicleGallery />
+      <VehicleVideo />
       <Services />
       <Destinations />
       <WhyChooseUs />

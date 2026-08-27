@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { VehicleDetails } from "@/components/sections/VehicleDetails";
+import { VehicleGallery } from "@/components/sections/VehicleGallery";
+import { VehicleVideo } from "@/components/sections/VehicleVideo";
 import { VehicleViewer } from "@/components/sections/VehicleViewer";
 import { PageHeader } from "@/components/site/PageHeader";
 
@@ -31,7 +33,9 @@ function OurCars() {
         text="A well-maintained Hyundai Venue kept clean and serviced for every journey."
       />
       <VehicleViewer />
+      <VehicleGallery />
       <VehicleDetails />
+      <VehicleVideo />
     </>
   );
 }

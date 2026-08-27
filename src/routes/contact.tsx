@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
-import { business } from "@/config/business";
+import { useContent } from "@/lib/content";
 import { generalEnquiryUrl } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/contact")({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const contact = useContent("contact");
   return (
     <>
       <PageHeader
@@ -34,16 +35,16 @@ function ContactPage() {
 
       <section className="section-x grid gap-6 py-16 sm:grid-cols-2 lg:py-20">
         <a
-          href={`tel:${business.phoneHref}`}
+          href={`tel:${contact.phoneHref}`}
           className="border border-border p-6 transition-colors hover:border-primary"
         >
           <Phone className="h-6 w-6 text-primary" strokeWidth={1.6} />
           <h2 className="mt-4 text-lg font-semibold text-foreground">Call us</h2>
-          <p className="mt-1 text-muted-foreground">{business.phone}</p>
+          <p className="mt-1 text-muted-foreground">{contact.phone}</p>
         </a>
 
         <a
-          href={generalEnquiryUrl()}
+          href={generalEnquiryUrl(contact.whatsapp)}
           target="_blank"
           rel="noopener noreferrer"
           className="border border-border p-6 transition-colors hover:border-primary"
@@ -54,18 +55,18 @@ function ContactPage() {
         </a>
 
         <a
-          href={business.mapsUrl}
+          href={contact.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="border border-border p-6 transition-colors hover:border-primary"
         >
           <MapPin className="h-6 w-6 text-primary" strokeWidth={1.6} />
           <h2 className="mt-4 text-lg font-semibold text-foreground">Where we are</h2>
-          <p className="mt-1 text-muted-foreground">{business.addressLine}</p>
+          <p className="mt-1 text-muted-foreground">{contact.addressLine}</p>
         </a>
 
         <a
-          href={business.instagram}
+          href={contact.instagram}
           target="_blank"
           rel="noopener noreferrer"
           className="border border-border p-6 transition-colors hover:border-primary"
@@ -77,7 +78,7 @@ function ContactPage() {
 
         <div className="border-l-2 border-accent bg-surface p-6 sm:col-span-2">
           <Clock className="h-6 w-6 text-primary" strokeWidth={1.6} />
-          <h2 className="mt-4 text-lg font-semibold text-foreground">{business.hours}</h2>
+          <h2 className="mt-4 text-lg font-semibold text-foreground">{contact.hours}</h2>
           <p className="mt-1 text-muted-foreground">
             Ready with your trip details? Fill the booking form and send it straight to WhatsApp.
           </p>

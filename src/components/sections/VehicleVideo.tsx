@@ -1,11 +1,15 @@
 import { Pause, Play } from "lucide-react";
 import { useRef, useState } from "react";
 import { useContent } from "@/lib/content";
+import { defaultVehicle } from "@/content/defaults";
 import { mediaUrl } from "@/lib/media";
 
 export function VehicleVideo() {
   const vehicle = useContent("vehicle");
-  const video = vehicle.video;
+  const video = {
+    ...vehicle.video,
+    poster: vehicle.video.poster || defaultVehicle.video.poster,
+  };
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 

@@ -267,7 +267,7 @@ export const defaultContact: ContactContent = {
   phone: "+91 98765 43210",
   phoneHref: "+919876543210",
   whatsapp: "919876543210",
-  instagram: "https://instagram.com/",
+  instagram: "https://www.instagram.com/tony_car_travels_5331",
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Khammam%2C+Telangana",
   addressLine: "Khammam, Telangana, India",
   hours: "Available 24x7 for bookings",

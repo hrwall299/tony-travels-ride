@@ -39,14 +39,18 @@ export function VehicleVideo() {
             <>
               <video
                 ref={ref}
-                src={mediaUrl(video.src)}
-                poster={mediaUrl(video.poster)}
+                src={`${mediaUrl(video.src)}#t=0.1`}
+                {...(video.poster ? { poster: mediaUrl(video.poster) } : {})}
                 playsInline
-                preload="none"
+                preload="metadata"
+                controls={playing}
                 onEnded={() => setPlaying(false)}
+                onPause={() => setPlaying(false)}
+                onPlay={() => setPlaying(true)}
                 onClick={toggle}
-                className="aspect-video w-full cursor-pointer object-cover"
+                className="aspect-video w-full cursor-pointer bg-black object-cover"
               />
+
               <button
                 type="button"
                 onClick={toggle}

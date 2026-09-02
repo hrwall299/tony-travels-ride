@@ -1,8 +1,27 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useRef } from "react";
 
 export function Logo({ className = "" }: { className?: string }) {
+  const navigate = useNavigate();
+  const taps = useRef<number[]>([]);
+
+  const handleTap = (e: React.MouseEvent) => {
+    const now = Date.now();
+    taps.current = [...taps.current, now].filter((t) => now - t < 1200);
+    if (taps.current.length >= 3) {
+      taps.current = [];
+      e.preventDefault();
+      void navigate({ to: "/admin" });
+    }
+  };
+
   return (
-    <Link to="/" className={`inline-flex flex-col leading-none ${className}`} aria-label="Tony Tour & Travels — home">
+    <Link
+      to="/"
+      onClick={handleTap}
+      className={`inline-flex flex-col leading-none ${className}`}
+      aria-label="Tony Tour & Travels — home"
+    >
       <span className="font-display text-[1.75rem] font-bold uppercase tracking-[0.02em] text-primary-dark sm:text-[2rem]">
         Tony
       </span>

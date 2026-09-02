@@ -1,15 +1,11 @@
 import { Pause, Play } from "lucide-react";
 import { useRef, useState } from "react";
 import { useContent } from "@/lib/content";
-import { defaultVehicle } from "@/content/defaults";
 import { mediaUrl } from "@/lib/media";
 
 export function VehicleVideo() {
   const vehicle = useContent("vehicle");
-  const video = {
-    ...vehicle.video,
-    poster: vehicle.video.poster || defaultVehicle.video.poster,
-  };
+  const video = vehicle.video;
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -17,13 +13,15 @@ export function VehicleVideo() {
     const el = ref.current;
     if (!el) return;
     if (el.paused) {
-      void el.play();
-      setPlaying(true);
+      el.play()
+        .then(() => setPlaying(true))
+        .catch(() => setPlaying(false));
     } else {
       el.pause();
       setPlaying(false);
     }
   };
+
 
   return (
     <section className="border-y border-border bg-surface py-16 lg:py-20">

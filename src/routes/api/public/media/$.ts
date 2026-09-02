@@ -14,6 +14,24 @@ export const Route = createFileRoute("/api/public/media/$")({
         }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+        // Redirect to a signed storage URL so the browser talks to storage
+        // directly — that endpoint supports HTTP Range requests, which media
+        // playback (seeking, streaming large videos) requires.
+        const { data: signed } = await supabaseAdmin.storage
+          .from("media")
+          .createSignedUrl(path, 60 * 60);
+
+        if (signed?.signedUrl) {
+          return new Response(null, {
+            status: 302,
+            headers: {
+              location: signed.signedUrl,
+              "cache-control": "public, max-age=300",
+            },
+          });
+        }
+
         const { data, error } = await supabaseAdmin.storage.from("media").download(path);
 
         if (error || !data) {
@@ -24,9 +42,11 @@ export const Route = createFileRoute("/api/public/media/$")({
           headers: {
             "content-type": data.type || "application/octet-stream",
             "cache-control": "public, max-age=300",
+            "accept-ranges": "none",
           },
         });
       },
+
     },
   },
 });

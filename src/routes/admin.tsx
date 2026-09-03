@@ -1,19 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { AccountPanel } from "@/components/admin/AccountPanel";
-import { EnquiriesPanel } from "@/components/admin/EnquiriesPanel";
-import { MediaManager } from "@/components/admin/MediaManager";
-import {
-  AboutEditor,
-  ContactEditor,
-  FooterEditor,
-  HeroEditor,
-  RoutesEditor,
-  ServicesEditor,
-  VehicleEditor,
-} from "@/components/admin/ContentEditors";
+import { AdminContext } from "@/components/admin/AdminContext";
 import { inputClass } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin")({
@@ -25,29 +14,26 @@ export const Route = createFileRoute("/admin")({
       { name: "description", content: "Private content management dashboard." },
     ],
   }),
-  component: AdminPage,
+  component: AdminLayout,
 });
 
-const TABS = [
-  { id: "enquiries", label: "Enquiries" },
-  { id: "hero", label: "Home / Hero" },
-  { id: "vehicle", label: "Vehicle" },
-  { id: "services", label: "Services" },
-  { id: "routes", label: "Routes" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
-  { id: "footer", label: "Footer" },
-  { id: "media", label: "Media" },
-  { id: "account", label: "Account" },
+export const ADMIN_TABS = [
+  { to: "/admin/enquiries", label: "Enquiries" },
+  { to: "/admin/hero", label: "Home / Hero" },
+  { to: "/admin/vehicle", label: "Vehicle" },
+  { to: "/admin/services", label: "Services" },
+  { to: "/admin/routes", label: "Routes" },
+  { to: "/admin/about", label: "About" },
+  { to: "/admin/contact", label: "Contact" },
+  { to: "/admin/footer", label: "Footer" },
+  { to: "/admin/media", label: "Media" },
+  { to: "/admin/account", label: "Account" },
 ] as const;
 
-type TabId = (typeof TABS)[number]["id"];
-
-function AdminPage() {
+function AdminLayout() {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [tab, setTab] = useState<TabId>("enquiries");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -78,9 +64,8 @@ function AdminPage() {
     };
   }, [session]);
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setSession(null);
+  const signOut = () => {
+    void supabase.auth.signOut().then(() => setSession(null));
   };
 
   if (!ready) {
@@ -100,7 +85,7 @@ function AdminPage() {
         </p>
         <button
           type="button"
-          onClick={() => void signOut()}
+          onClick={signOut}
           className="inline-flex h-10 items-center border border-border px-4 text-sm font-semibold uppercase"
         >
           Log out
@@ -114,49 +99,41 @@ function AdminPage() {
   }
 
   return (
-    <div className="section-x py-10 lg:py-14">
-      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-5">
-        <div>
-          <p className="eyebrow">Dashboard</p>
-          <h1 className="mt-2 font-display text-2xl font-bold uppercase text-primary-dark sm:text-3xl">
-            Website Administration
-          </h1>
+    <AdminContext.Provider value={{ email: session.user.email ?? "", signOut }}>
+      <div className="section-x py-10 lg:py-14">
+        <header className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-5">
+          <div>
+            <p className="eyebrow">Dashboard</p>
+            <h1 className="mt-2 font-display text-2xl font-bold uppercase text-primary-dark sm:text-3xl">
+              Website Administration
+            </h1>
+          </div>
+          <p className="text-sm text-muted-foreground">{session.user.email}</p>
+        </header>
+
+        <div className="mt-8 gap-8 lg:grid lg:grid-cols-[220px_1fr]">
+          <nav className="flex flex-wrap gap-2 lg:sticky lg:top-24 lg:flex-col lg:self-start">
+            {ADMIN_TABS.map((t) => (
+              <Link
+                key={t.to}
+                to={t.to}
+                className="h-9 border border-border px-3 text-sm font-medium leading-9 text-primary-dark transition-colors hover:border-primary lg:h-auto lg:py-2 lg:leading-normal"
+                activeProps={{
+                  className:
+                    "h-9 border border-primary bg-primary px-3 text-sm font-medium leading-9 text-primary-foreground lg:h-auto lg:py-2 lg:leading-normal",
+                }}
+              >
+                {t.label}
+              </Link>
+            ))}
+          </nav>
+
+          <main className="mt-6 space-y-6 lg:mt-0">
+            <Outlet />
+          </main>
         </div>
-        <p className="text-sm text-muted-foreground">{session.user.email}</p>
-      </header>
-
-      <nav className="mt-6 flex flex-wrap gap-2">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={`h-9 border px-3 text-sm font-medium transition-colors ${
-              tab === t.id
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border text-primary-dark hover:border-primary"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </nav>
-
-      <main className="mt-8 space-y-6">
-        {tab === "enquiries" ? <EnquiriesPanel /> : null}
-        {tab === "hero" ? <HeroEditor /> : null}
-        {tab === "vehicle" ? <VehicleEditor /> : null}
-        {tab === "services" ? <ServicesEditor /> : null}
-        {tab === "routes" ? <RoutesEditor /> : null}
-        {tab === "about" ? <AboutEditor /> : null}
-        {tab === "contact" ? <ContactEditor /> : null}
-        {tab === "footer" ? <FooterEditor /> : null}
-        {tab === "media" ? <MediaManager /> : null}
-        {tab === "account" ? (
-          <AccountPanel email={session.user.email ?? ""} onSignOut={() => void signOut()} />
-        ) : null}
-      </main>
-    </div>
+      </div>
+    </AdminContext.Provider>
   );
 }
 

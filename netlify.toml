@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SSR + server routes are served by the Nitro-generated Netlify function.
+# Static assets in `dist` are served directly by the CDN.

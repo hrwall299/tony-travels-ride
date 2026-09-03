@@ -17,6 +17,17 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as OurCarsRouteImport } from './routes/our-cars'
 import { Route as RoutesRouteImport } from './routes/routes'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAboutRouteImport } from './routes/admin.about'
+import { Route as AdminAccountRouteImport } from './routes/admin.account'
+import { Route as AdminContactRouteImport } from './routes/admin.contact'
+import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
+import { Route as AdminFooterRouteImport } from './routes/admin.footer'
+import { Route as AdminHeroRouteImport } from './routes/admin.hero'
+import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminRoutesRouteImport } from './routes/admin.routes'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminVehicleRouteImport } from './routes/admin.vehicle'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +70,61 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAboutRoute = AdminAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAccountRoute = AdminAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminContactRoute = AdminContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
+  id: '/enquiries',
+  path: '/enquiries',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFooterRoute = AdminFooterRouteImport.update({
+  id: '/footer',
+  path: '/footer',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHeroRoute = AdminHeroRouteImport.update({
+  id: '/hero',
+  path: '/hero',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMediaRoute = AdminMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoutesRoute = AdminRoutesRouteImport.update({
+  id: '/routes',
+  path: '/routes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminVehicleRoute = AdminVehicleRouteImport.update({
+  id: '/vehicle',
+  path: '/vehicle',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
@@ -68,35 +134,67 @@ const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/our-cars': typeof OurCarsRoute
   '/routes': typeof RoutesRoute
   '/services': typeof ServicesRoute
+  '/admin/about': typeof AdminAboutRoute
+  '/admin/account': typeof AdminAccountRoute
+  '/admin/contact': typeof AdminContactRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/routes': typeof AdminRoutesRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/vehicle': typeof AdminVehicleRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/our-cars': typeof OurCarsRoute
   '/routes': typeof RoutesRoute
   '/services': typeof ServicesRoute
+  '/admin/about': typeof AdminAboutRoute
+  '/admin/account': typeof AdminAccountRoute
+  '/admin/contact': typeof AdminContactRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/routes': typeof AdminRoutesRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/vehicle': typeof AdminVehicleRoute
+  '/admin': typeof AdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/our-cars': typeof OurCarsRoute
   '/routes': typeof RoutesRoute
   '/services': typeof ServicesRoute
+  '/admin/about': typeof AdminAboutRoute
+  '/admin/account': typeof AdminAccountRoute
+  '/admin/contact': typeof AdminContactRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
+  '/admin/footer': typeof AdminFooterRoute
+  '/admin/hero': typeof AdminHeroRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/routes': typeof AdminRoutesRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/vehicle': typeof AdminVehicleRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
@@ -110,17 +208,38 @@ export interface FileRouteTypes {
     | '/our-cars'
     | '/routes'
     | '/services'
+    | '/admin/about'
+    | '/admin/account'
+    | '/admin/contact'
+    | '/admin/enquiries'
+    | '/admin/footer'
+    | '/admin/hero'
+    | '/admin/media'
+    | '/admin/routes'
+    | '/admin/services'
+    | '/admin/vehicle'
+    | '/admin/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/book'
     | '/contact'
     | '/our-cars'
     | '/routes'
     | '/services'
+    | '/admin/about'
+    | '/admin/account'
+    | '/admin/contact'
+    | '/admin/enquiries'
+    | '/admin/footer'
+    | '/admin/hero'
+    | '/admin/media'
+    | '/admin/routes'
+    | '/admin/services'
+    | '/admin/vehicle'
+    | '/admin'
     | '/api/public/media/$'
   id:
     | '__root__'
@@ -132,13 +251,24 @@ export interface FileRouteTypes {
     | '/our-cars'
     | '/routes'
     | '/services'
+    | '/admin/about'
+    | '/admin/account'
+    | '/admin/contact'
+    | '/admin/enquiries'
+    | '/admin/footer'
+    | '/admin/hero'
+    | '/admin/media'
+    | '/admin/routes'
+    | '/admin/services'
+    | '/admin/vehicle'
+    | '/admin/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BookRoute: typeof BookRoute
   ContactRoute: typeof ContactRoute
   OurCarsRoute: typeof OurCarsRoute
@@ -205,6 +335,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/about': {
+      id: '/admin/about'
+      path: '/about'
+      fullPath: '/admin/about'
+      preLoaderRoute: typeof AdminAboutRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/account': {
+      id: '/admin/account'
+      path: '/account'
+      fullPath: '/admin/account'
+      preLoaderRoute: typeof AdminAccountRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/contact': {
+      id: '/admin/contact'
+      path: '/contact'
+      fullPath: '/admin/contact'
+      preLoaderRoute: typeof AdminContactRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/enquiries': {
+      id: '/admin/enquiries'
+      path: '/enquiries'
+      fullPath: '/admin/enquiries'
+      preLoaderRoute: typeof AdminEnquiriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/footer': {
+      id: '/admin/footer'
+      path: '/footer'
+      fullPath: '/admin/footer'
+      preLoaderRoute: typeof AdminFooterRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hero': {
+      id: '/admin/hero'
+      path: '/hero'
+      fullPath: '/admin/hero'
+      preLoaderRoute: typeof AdminHeroRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/media': {
+      id: '/admin/media'
+      path: '/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/routes': {
+      id: '/admin/routes'
+      path: '/routes'
+      fullPath: '/admin/routes'
+      preLoaderRoute: typeof AdminRoutesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/vehicle': {
+      id: '/admin/vehicle'
+      path: '/vehicle'
+      fullPath: '/admin/vehicle'
+      preLoaderRoute: typeof AdminVehicleRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/media/$': {
       id: '/api/public/media/$'
       path: '/api/public/media/$'
@@ -215,10 +422,40 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminAboutRoute: typeof AdminAboutRoute
+  AdminAccountRoute: typeof AdminAccountRoute
+  AdminContactRoute: typeof AdminContactRoute
+  AdminEnquiriesRoute: typeof AdminEnquiriesRoute
+  AdminFooterRoute: typeof AdminFooterRoute
+  AdminHeroRoute: typeof AdminHeroRoute
+  AdminMediaRoute: typeof AdminMediaRoute
+  AdminRoutesRoute: typeof AdminRoutesRoute
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminVehicleRoute: typeof AdminVehicleRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAboutRoute: AdminAboutRoute,
+  AdminAccountRoute: AdminAccountRoute,
+  AdminContactRoute: AdminContactRoute,
+  AdminEnquiriesRoute: AdminEnquiriesRoute,
+  AdminFooterRoute: AdminFooterRoute,
+  AdminHeroRoute: AdminHeroRoute,
+  AdminMediaRoute: AdminMediaRoute,
+  AdminRoutesRoute: AdminRoutesRoute,
+  AdminServicesRoute: AdminServicesRoute,
+  AdminVehicleRoute: AdminVehicleRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   BookRoute: BookRoute,
   ContactRoute: ContactRoute,
   OurCarsRoute: OurCarsRoute,

@@ -1,6 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { useContent } from "@/lib/content";
-import { mediaUrl } from "@/lib/media";
+
+const OrbitDeliveryHero = lazy(() => import("@/components/ui/orbit-delivery-hero"));
 
 export function Hero() {
   const hero = useContent("hero");
@@ -8,8 +10,8 @@ export function Hero() {
 
   return (
     <section className="border-b border-border bg-surface">
-      <div className="section-x grid items-center gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 lg:py-16">
-        <div>
+      <div className="section-x grid items-center gap-8 py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)] lg:gap-8 lg:py-14">
+        <div className="relative z-10">
           <p className="eyebrow">{hero.eyebrow}</p>
           <h1 className="mt-4 font-display text-4xl font-bold uppercase leading-[1.05] text-primary-dark sm:text-5xl lg:text-6xl">
             {line1}
@@ -24,13 +26,13 @@ export function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              to="/book"
+              to={hero.primaryTo}
               className="inline-flex h-12 items-center bg-accent px-6 text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-colors hover:brightness-95"
             >
               {hero.primaryLabel}
             </Link>
             <Link
-              to="/our-cars"
+              to={hero.secondaryTo}
               className="inline-flex h-12 items-center border border-primary px-6 text-sm font-semibold uppercase tracking-wide text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
             >
               {hero.secondaryLabel}
@@ -47,16 +49,12 @@ export function Hero() {
           </dl>
         </div>
 
-        <div className="relative">
-          <div className="absolute inset-x-6 bottom-0 top-10 -z-10 bg-primary/5" aria-hidden="true" />
-          <img
-            src={mediaUrl(hero.image)}
-            alt="Hyundai Venue used by Tony Tour & Travels for car travel in Khammam"
-            width={1600}
-            height={1000}
-            className="w-full"
-            fetchPriority="high"
-          />
+        <div className="relative min-h-[400px] overflow-hidden sm:min-h-[460px] lg:-my-8 lg:min-h-[560px]" aria-label="Interactive travel animation">
+          <ClientOnly fallback={<div className="h-[400px] w-full bg-surface-strong sm:h-[460px] lg:h-[560px]" />}>
+            <Suspense fallback={<div className="h-[400px] w-full bg-surface-strong sm:h-[460px] lg:h-[560px]" />}>
+              <OrbitDeliveryHero theme="light" />
+            </Suspense>
+          </ClientOnly>
         </div>
       </div>
     </section>
